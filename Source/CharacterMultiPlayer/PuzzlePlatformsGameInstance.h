@@ -1,16 +1,16 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MainMenu.h"
 #include "Engine/GameInstance.h"
+#include "MenuSystem.h"
 #include "PuzzlePlatformsGameInstance.generated.h"
 
 /**
- * 
+ *
  */
 UCLASS()
-class CHARACTERMULTIPLAYER_API UPuzzlePlatformsGameInstance : public UGameInstance
+class CHARACTERMULTIPLAYER_API UPuzzlePlatformsGameInstance : public UGameInstance, public IMenuSystem
 {
 	GENERATED_BODY()
 
@@ -19,10 +19,23 @@ public:
 
 	virtual void Init() override;
 
-	//¸í·É¾î command
 	UFUNCTION(Exec)
-	void Host();
+	virtual void Host() override;
 
 	UFUNCTION(Exec)
-	void Join(const FString& Address);
+	virtual void Join(const FString& Address) override;
+
+	UFUNCTION(BlueprintCallable)
+	void LoadMenu();
+
+	UFUNCTION(BlueprintCallable)
+	void InGameLoadMenu();
+
+	virtual void LoadMainMenu() override;
+
+private:
+	TSubclassOf<class UUserWidget> MenuClass;
+	TSubclassOf<class UUserWidget> InGameMenuClass;
+
+	class UMainMenu* Menu;
 };
